@@ -1,4 +1,5 @@
 import os
+import logging
 import json
 from urllib.error import URLError
 
@@ -10,6 +11,7 @@ from django_currentuser.middleware import get_current_user
 
 from ..utils.input import RawCommand
 from ..models import Minions, Functions, MinionsCustomFields, Keys, Schedule
+logger = logging.getLogger(__name__)
 
 urllib3.disable_warnings()
 
@@ -18,8 +20,11 @@ url = os.environ.get("SALT_URL", "https://127.0.0.1:8080")
 
 def api_connect():
     user = get_current_user()
+    logger.info('GREPFORME: %s' % (user,))
     api = Pepper(url, ignore_ssl_errors=True)
     try:
+
+        logger.info('GREPFORME: %s' % (user.username,))
         login_ret = api.login(
             str(user.username),
             user.user_settings.token,
